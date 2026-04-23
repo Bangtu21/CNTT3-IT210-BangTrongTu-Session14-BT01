@@ -1,0 +1,14 @@
+Session14-BT01-Phần 1
+- đơn hàng lại bị cập nhật sai trạng thái dù tiền chưa trừ tại vì: Không sử dụng transaction
+	Hệ thống lấy đơn hàng ra và đổi trạng thái thành "PAID"
+	Hibernate ghi nhận thay đổi này trong bộ nhớ và có thể đẩy xuống database ngay sau đó
+	Chưa kịp trừ tiền ví thì hệ thống bị lỗi (giả lập lỗi kết nối)
+	Có bắt lỗi, nhưng không rollback gì cả
+	Cuối cùng đóng session → Hibernate vẫn có thể ghi thay đổi xuống DB
+
+	 Kết quả:
+
+	Đơn hàng đã thành “Đã thanh toán”
+	Nhưng tiền trong ví chưa bị trừ
+
+- Vòng đời của Transaction đang bị thiếu những lệnh quan trọng transaction, commit và rollback
